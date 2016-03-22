@@ -13,13 +13,22 @@ public class trainListLayoutActivity extends AppCompatActivity {
 
     private TextView src;
     private TextView des;
+    private TextView date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.train_list_layout);
         src = (TextView) findViewById(R.id.src);
         des = (TextView) findViewById(R.id.des);
+        date = (TextView) findViewById(R.id.date);
+
+
         Intent intent = getIntent();
+
+        src.setText(intent.getStringExtra("str_src"));
+        des.setText(intent.getStringExtra("str_des"));
+        date.setText(intent.getStringExtra("str_date"));
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
