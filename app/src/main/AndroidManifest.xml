@@ -23,6 +23,11 @@
             android:label="@string/title_activity_train_list_layout"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".myOrder"
+            android:label="@string/title_activity_my_order"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
