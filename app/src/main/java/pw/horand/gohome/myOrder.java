@@ -13,12 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class myOrder extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private LinearLayout order_LL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +28,13 @@ public class myOrder extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
+        order_LL = (LinearLayout) findViewById(R.id.order1);
+        order_LL.setOnClickListener(new LinearLayout.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(myOrder.this, myOrderDetail.class);
+                startActivity(intent);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +81,9 @@ public class myOrder extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -86,13 +97,18 @@ public class myOrder extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camara) {
+            Intent intent = new Intent(this,myOrder.class);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(this,waitPayMoney.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-
+            Intent intent = new Intent(this,myQueue.class);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
-
+            Intent intent = new Intent(this,myInformation.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -102,5 +118,9 @@ public class myOrder extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void toOrderDetailClick(){
+
     }
 }

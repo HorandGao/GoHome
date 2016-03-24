@@ -13,31 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-public class myTrainList extends AppCompatActivity
+public class myOrderDetail extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private TextView src;
-    private TextView des;
-    private TextView date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_train_list);
+        setContentView(R.layout.activity_my_order_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        src = (TextView) findViewById(R.id.src);
-        des = (TextView) findViewById(R.id.des);
-        date = (TextView) findViewById(R.id.date);
-
-
-        Intent intent = getIntent();
-
-        src.setText(intent.getStringExtra("str_src"));
-        des.setText(intent.getStringExtra("str_des"));
-        date.setText(intent.getStringExtra("str_date"));
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,13 +51,6 @@ public class myTrainList extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my_train_list, menu);
-        return true;
     }
 
     @Override
@@ -121,5 +100,4 @@ public class myTrainList extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
