@@ -1,5 +1,6 @@
 package pw.horand.gohome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,16 +13,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class myOrder extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private TextView src;
+    private TextView des;
+    private TextView date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_order);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        src = (TextView) findViewById(R.id.src);
+        des = (TextView) findViewById(R.id.des);
+        date = (TextView) findViewById(R.id.date);
+
+
+        Intent intent = getIntent();
+
+        src.setText(intent.getStringExtra("str_src"));
+        des.setText(intent.getStringExtra("str_des"));
+        date.setText(intent.getStringExtra("str_date"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
