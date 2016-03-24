@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void passData(){
-        Intent intent = new Intent(this,trainListLayoutActivity.class);
+        Intent intent = new Intent(this,myTrainList.class);
 
         intent.putExtra("str_src", dym_src.getText().toString().trim());
         intent.putExtra("str_des",dym_des.getText().toString().trim());

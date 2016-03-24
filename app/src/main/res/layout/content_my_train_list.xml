@@ -5,7 +5,11 @@
     android:layout_height="match_parent" android:paddingLeft="0px"
     android:paddingRight="0px"
     android:paddingTop="0px"
-    android:background="@color/material_grey_300">
+    android:paddingBottom="0px"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@color/material_grey_300"
+    tools:showIn="@layout/app_bar_my_train_list" tools:context="pw.horand.gohome.myTrainList">
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -224,5 +228,4 @@
             android:text="预定"
             android:id="@+id/btn_booking1"/>
     </LinearLayout>
-
 </RelativeLayout>
