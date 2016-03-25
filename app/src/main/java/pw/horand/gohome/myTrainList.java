@@ -122,4 +122,12 @@ public class myTrainList extends AppCompatActivity
         return true;
     }
 
+    public void giveOrderClick(View view){
+        Intent intent = new Intent();
+        intent.setClass(myTrainList.this,myBooking.class);
+        //reverse transform data!!!
+
+        startActivity(intent);
+
+    }
 }

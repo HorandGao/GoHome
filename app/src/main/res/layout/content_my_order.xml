@@ -20,6 +20,7 @@
         android:layout_marginBottom="10px"
         android:id="@+id/order1"
         android:background="@drawable/border"
+        android:onClick="toOrderDetailClick"
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -75,6 +76,7 @@
         android:layout_below="@+id/order1"
         android:layout_centerHorizontal="true"
         android:background="@drawable/border"
+        android:onClick="toOrderDetailClick"
         >
         <RelativeLayout
             android:layout_width="match_parent"

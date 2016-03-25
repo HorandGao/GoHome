@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="30px"
+    android:background="@color/material_grey_300"
+    >
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       android:background="@drawable/border"
+       android:padding="30px"
+       >
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" android:textSize="50px"
+           android:text="请选择城市:"/>
+   </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="上海"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="北京"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="武汉"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="重庆"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="天津"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="杭州"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="selectCityOKClick"
+        android:clickable="true"
+        android:background="@drawable/border"
+        android:padding="30px"
+        android:layout_marginTop="10px"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textSize="50px"
+            android:text="南京"/>
+    </LinearLayout>
+</LinearLayout>

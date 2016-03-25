@@ -12,35 +12,13 @@
 
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout_topbar"
-
-        android:background="#878787">
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text=""
-            android:id="@+id/switch_ticketType" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="高纯"
-            android:id="@+id/button" />
-    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="30px"
-        android:layout_below="@+id/linearLayout_topbar"
         android:layout_centerHorizontal="true"
         android:id="@+id/linearLayout"
         >
@@ -81,14 +59,17 @@
         android:layout_marginLeft="30px"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="北京"
-        android:id="@+id/dym_src" />
+        android:id="@+id/dym_src"
+        android:onClick="srcCitySelectClick"
+        android:clickable="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/img_change"
         android:src="@android:drawable/stat_notify_sync"
-        android:layout_weight="0.9" />
+        android:layout_weight="0.9"
+        android:onClick="change_cityClick"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,7 +77,9 @@
         android:layout_marginRight="30px"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="上海"
-        android:id="@+id/dym_des" />
+        android:id="@+id/dym_des"
+        android:onClick="desCitySelectClick"
+        android:clickable="true"/>
 </LinearLayout>
 
     <LinearLayout
@@ -212,4 +195,5 @@
             android:id="@+id/btn_look"
             android:background="#878787" />
     </LinearLayout>
+
 </RelativeLayout>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="0px"
+    android:paddingRight="0px"
+    android:paddingTop="20px"
+    android:paddingBottom="0px"
+    android:background="@color/material_grey_300"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_my_booking" tools:context="pw.horand.gohome.myBooking">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/order_detail"
+        android:layout_marginTop="2px"
+        android:weightSum="0.75"
+        android:background="#ffffff">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="0.25" android:weightSum="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="60px"
+                android:padding="20px"
+                android:text="D3086"
+                android:id="@+id/text_trainNum" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:paddingLeft="60px"
+                android:textSize="30px"
+                android:text="软卧 12"
+                android:id="@+id/text_highSeat" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:id="@+id/train_station">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="上海虹桥"
+                android:id="@+id/text_src" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="10px"
+                android:text="武汉"
+                android:id="@+id/text_des" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30px"
+                android:text="硬卧 212"
+                android:id="@+id/text_midSeat" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="0.25"
+            android:id="@+id/train_time">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="16:43"
+                android:id="@+id/text_start" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_margin="10px"
+                android:text="22:10"
+                android:id="@+id/text_end" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30px"
+                android:text="硬座 112"
+                android:id="@+id/text_lowSeat" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/order_detail"
+        android:id="@+id/select_type"
+        android:orientation="vertical"
+        android:layout_marginTop="30px"
+        android:background="#ffffff">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
+            android:textSize="50px" android:text="请选择席次:"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10px" android:weightSum="0.9">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="软卧:12"
+                android:padding="20px" android:layout_marginLeft="20px" android:layout_weight="0.3"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="硬卧:212"
+                android:padding="20px" android:layout_weight="0.3"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:text="硬座:112"
+                android:padding="20px" android:layout_marginRight="20px" android:layout_weight="0.3"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/select_type"
+        android:layout_marginTop="30px"
+        android:background="#ffffff"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20px"
+            android:textSize="50px" android:text="请选择乘客:"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10px"
+            android:layout_marginBottom="10px"
+            android:layout_marginLeft="30px"
+            android:orientation="vertical">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="horand"
+                android:id="@+id/checkBox1" />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="horand"
+                android:id="@+id/checkBox2" />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="horand"
+                android:id="@+id/checkBox3" />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="horand"
+                android:id="@+id/checkBox4" />
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="40px"
+        android:layout_marginRight="40px"
+        android:layout_marginBottom="40px"
+        android:background="@color/material_grey_600"
+        android:text="提交订单"
+        android:onClick="submitOrderClick"
+        />
+</RelativeLayout>
