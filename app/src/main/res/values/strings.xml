@@ -28,4 +28,5 @@
     </string>
     <string name="title_activity_my_booking">确认订单</string>
     <string name="title_activity_result_submit_order">提交结果</string>
+    <string name="title_activity_aaaa">Sign in</string>
 </resources>

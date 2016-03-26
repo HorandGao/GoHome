@@ -5,6 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +34,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +80,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+
+//    private Handler handler = new Handler(){
+//        public void handlerMessage(android.os.Message msg){
+//            if(msg.what == 1){
+//                mEmailView.setText("test");
+//            }else{
+//                mEmailView.setText("test222");
+//            }
+//        };
+//    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +102,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    try {
+                        attemptLogin();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 }
                 return false;
@@ -86,7 +119,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                try {
+                    attemptLogin();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -143,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptLogin() throws IOException, JSONException {
         if (mAuthTask != null) {
             return;
         }
@@ -186,7 +225,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.onPostExecute(mAuthTask.execute());
+            mAuthTask.execute((Void) null);
         }
     }
 
@@ -305,13 +344,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params){
             // TODO: attempt authentication against a network service.
-
+            boolean temp = false;
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                //Thread.sleep(2000);
+                String path = "http://10.202.73.41:8080/horand/test.action?name="+mEmail+"&password="+mPassword;
+                URL url = new URL(path);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setConnectTimeout(5000);
+                conn.setRequestMethod("GET");
+                conn.connect();
+                if(conn.getResponseCode() == 200){
+                    InputStream is = conn.getInputStream();
+                    String test = InputStreamTOString(is, "UTF-8");
+                    JSONObject a = new JSONObject(test);
+                    Log.i("aaaaaa",a.getString("success"));
+                    if(a.getString("success").equals("1")) {
+                        temp = true;
+                    }else{
+                        temp= false;
+                    }
+                }else{
+                    temp = false;
+                }
+                conn.disconnect();
+            }catch (Exception e){
                 return false;
             }
 
@@ -324,7 +383,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // TODO: register the new account here.
-            return true;
+            return temp;
         }
 
         @Override
@@ -334,9 +393,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
 
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                intent.putExtra("str_mail",mEmail);
-                intent.putExtra("reverse","");
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("str_mail", mEmail);
+                intent.putExtra("reverse", "");
                 startActivity(intent);
 
             } else {
@@ -351,12 +410,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
 
-        protected boolean execute(){
-            if(mEmail.equals("111@111") && mPassword.equals("111111")){
-                return true;
-            }
-            return false;
-        }
+//        protected boolean execute() throws Exception {
+//             if(mEmail.equals("111@111") && mPassword.equals("111111")){
+//                return true;
+//            }
+//            return false;
+//        }
+    }
+
+    public static String InputStreamTOString(InputStream in,String encoding) throws Exception{
+
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] data = new byte[1024];
+        int count = -1;
+        while((count = in.read(data,0,1024)) != -1)
+            outStream.write(data, 0, count);
+
+        data = null;
+        return new String(outStream.toByteArray(),"ISO-8859-1");
     }
 }
-
