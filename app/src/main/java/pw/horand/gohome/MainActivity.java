@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +35,10 @@ public class MainActivity extends AppCompatActivity
     private TextView train_type;
     private TextView loginMail;
     private TextView reverse; // 保留！！！！！
+
+    private int flag=0; //用于标记 区分src_city=0 des_city=1
+    private String src_city="";
+    private String des_city="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +75,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Intent intent = getIntent();
-        loginMail.setText(intent.getStringExtra("str_mail"));
+        globalData userInfo = (globalData)getApplication();
+
+        loginMail.setText(userInfo.getEmail().toString());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -177,9 +183,13 @@ public class MainActivity extends AppCompatActivity
     public void srcCitySelectClick(View view){
         //Toast.makeText(MainActivity.this, "aaaa", Toast.LENGTH_SHORT).show();
         setContentView(R.layout.city_select);
+        des_city = dym_des.getText().toString();
+        flag = 0;
     }
     public void desCitySelectClick(View view){
         setContentView(R.layout.city_select);
+        src_city = dym_src.getText().toString();
+        flag = 1;
     }
 
     public void selectCityOKClick(View view){
@@ -199,6 +209,17 @@ public class MainActivity extends AppCompatActivity
                 passData();
             }
         });
+
+        TextView city = (TextView)view.findViewWithTag("city_name");
+        if(flag == 0){
+            dym_src.setText(city.getText().toString());
+            dym_des.setText(des_city);
+        }
+        else{
+            dym_des.setText(city.getText().toString());
+            dym_src.setText(src_city);
+        }
+
 
         final Calendar c = Calendar.getInstance();
         go_date.setText(android.text.format.DateFormat.format("MM-dd E", c));

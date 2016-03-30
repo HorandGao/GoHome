@@ -5,123 +5,32 @@
     android:layout_height="match_parent" android:paddingLeft="0px"
     android:paddingRight="0px"
     android:paddingTop="0px"
+    android:id="@+id/rl_allOrder"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="@color/material_grey_300"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_my_order" tools:context="pw.horand.gohome.myOrder">
 
-
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10px"
-        android:id="@+id/order1"
-        android:background="@drawable/border"
-        android:onClick="toOrderDetailClick"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10px">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30px"
-                android:textSize="50px"
-                android:text="D3096"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="30px"
-                android:textSize="50px"
-                android:text="02月11日 11:22开"/>
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:background="#878787"
-            android:layout_margin="10px"
-            ></LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="15px"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30px"
-                android:textSize="60px"
-                android:text="孝感--->上海"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="30px"
-                android:textSize="60px"
-                android:text="已完成"/>
-        </RelativeLayout>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="0px"
+        android:gravity="center">
+    <ProgressBar android:id="@+id/allOrder_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/order1"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/border"
-        android:onClick="toOrderDetailClick"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10px">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30px"
-                android:textSize="50px"
-                android:text="D3096"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="30px"
-                android:textSize="50px"
-                android:text="02月11日 11:22开"/>
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:background="#878787"
-            android:layout_margin="10px"
-            ></LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="15px"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30px"
-                android:textSize="60px"
-                android:text="孝感--->上海"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="30px"
-                android:textSize="60px"
-                android:text="待付款"/>
-        </RelativeLayout>
+    <ScrollView android:id="@+id/allOrder_form" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ScrollView>
     </LinearLayout>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_order"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:divider="#00000000"
+        android:dividerHeight="10px"
+        android:layout_marginTop="0dp" />
 </RelativeLayout>

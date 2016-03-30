@@ -28,7 +28,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" android:tag="city_name"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="上海"/>
     </LinearLayout>
@@ -43,7 +43,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" android:tag="city_name"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="北京"/>
     </LinearLayout>
@@ -58,7 +58,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" android:tag="city_name"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="武汉"/>
     </LinearLayout>
@@ -73,7 +73,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" android:tag="city_name"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="重庆"/>
     </LinearLayout>
@@ -88,7 +88,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" android:tag="city_name"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="天津"/>
     </LinearLayout>
@@ -103,6 +103,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
+            android:tag="city_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="杭州"/>
@@ -118,7 +119,7 @@
         android:layout_marginTop="10px"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" android:tag="city_name"
             android:layout_height="wrap_content" android:textSize="50px"
             android:text="南京"/>
     </LinearLayout>

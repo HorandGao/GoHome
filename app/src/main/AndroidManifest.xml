@@ -13,6 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name=".globalData"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".LoginActivity"
@@ -67,10 +68,6 @@
             android:name=".resultSubmitOrder"
             android:label="@string/title_activity_result_submit_order"
             android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name=".aaaa"
-            android:label="@string/title_activity_aaaa" >
         </activity>
     </application>
 

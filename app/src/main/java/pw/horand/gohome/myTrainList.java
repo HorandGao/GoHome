@@ -38,6 +38,12 @@ public class myTrainList extends AppCompatActivity
         src.setText(intent.getStringExtra("str_src"));
         des.setText(intent.getStringExtra("str_des"));
         date.setText(intent.getStringExtra("str_date"));
+
+
+        globalData userInfo = (globalData)getApplication();
+
+        ((TextView) findViewById(R.id.login_mail)).setText(userInfo.getEmail().toString());
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

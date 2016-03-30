@@ -33,6 +33,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +49,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -73,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
+    private SignUpTask mSignUpTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -94,7 +98,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -126,6 +129,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        Button mEmailSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
+        mEmailSignUpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.layout_sign_up);
             }
         });
 
@@ -229,6 +240,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    private void attemptSignUp(){
+        showProgress(true);
+        String name = ((EditText)findViewById(R.id.name)).getText().toString();
+        String pwd = ((EditText)findViewById(R.id.repeatPWD)).getText().toString();
+        String idcard = ((EditText)findViewById(R.id.sign_idcard)).getText().toString();
+        String phone = ((EditText)findViewById(R.id.tel)).getText().toString();
+        String realName = ((EditText)findViewById(R.id.realName)).getText().toString();
+
+        mSignUpTask = new SignUpTask(name,pwd,idcard,phone,realName);
+        mSignUpTask.execute((Void) null);
+    }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -329,6 +352,77 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
+
+
+
+    public class SignUpTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mEmail;
+        private final String mPassword;
+        private final String mIdcard;
+        private final String mPhone;
+        private final String mRealName;
+
+        SignUpTask(String name, String password ,String idcard,String phone ,String realName) {
+            mEmail = name;
+            mPassword = password;
+            mIdcard = idcard;
+            mPhone = phone;
+            mRealName = realName;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            // TODO: attempt authentication against a network service.
+            boolean temp = false;
+            try {
+                // Simulate network access.
+                //Thread.sleep(2000);
+                String path = "http://115.28.158.46/addUser.action?name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+mRealName;
+                URL url = new URL(path);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setConnectTimeout(5000);
+                conn.setRequestMethod("GET");
+                conn.connect();
+                if(conn.getResponseCode() == 200){
+                    InputStream is = conn.getInputStream();
+                    String test = InputStreamTOString(is, "UTF-8");
+                    JSONObject a = new JSONObject(test);
+                    if(a.getString("success").equals("1")) {
+                        temp = true;
+                    }else{
+                        temp= false;
+                    }
+                }else{
+                    temp = false;
+                }
+                conn.disconnect();
+            }catch (Exception e){
+                return false;
+            }
+            return temp;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+            if (success) {
+                Toast.makeText(LoginActivity.this, "注册成功，跳转到登录界面 ", Toast.LENGTH_SHORT).show();
+                cancelSignUpClick(new View(LoginActivity.this));
+            } else {
+                Toast.makeText(LoginActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -350,7 +444,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 //Thread.sleep(2000);
-                String path = "http://10.202.73.41:8080/horand/test.action?name="+mEmail+"&password="+mPassword;
+                String path = "http://115.28.158.46/horand/test.action?name="+mEmail+"&password="+mPassword;
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setConnectTimeout(5000);
@@ -360,7 +454,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     InputStream is = conn.getInputStream();
                     String test = InputStreamTOString(is, "UTF-8");
                     JSONObject a = new JSONObject(test);
-                    Log.i("aaaaaa",a.getString("success"));
                     if(a.getString("success").equals("1")) {
                         temp = true;
                     }else{
@@ -373,16 +466,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }catch (Exception e){
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
             return temp;
         }
 
@@ -393,8 +476,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
 
+                globalData userInfo = (globalData)getApplication();
+                userInfo.setEmail(mEmail);
+
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("str_mail", mEmail);
                 intent.putExtra("reverse", "");
                 startActivity(intent);
 
@@ -410,12 +495,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
 
-//        protected boolean execute() throws Exception {
-//             if(mEmail.equals("111@111") && mPassword.equals("111111")){
-//                return true;
-//            }
-//            return false;
-//        }
     }
 
     public static String InputStreamTOString(InputStream in,String encoding) throws Exception{
@@ -427,6 +506,61 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             outStream.write(data, 0, count);
 
         data = null;
-        return new String(outStream.toByteArray(),"ISO-8859-1");
+        return new String(outStream.toByteArray(),encoding);
+    }
+
+
+    public void goSignUpClick(View v){
+        attemptSignUp();
+    }
+
+
+
+    public void cancelSignUpClick(View v){
+        setContentView(R.layout.activity_login);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        populateAutoComplete();
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    try {
+                        attemptLogin();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    attemptLogin();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Button mEmailSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
+        mEmailSignUpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.layout_sign_up);
+            }
+        });
+
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 }
