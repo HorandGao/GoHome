@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:descendantFocusability="blocksDescendants"
+        android:id="@+id/list"
+        android:layout_marginTop="2px"
+        android:weightSum="1"
+        android:background="#878787">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"  android:layout_weight="0.25" android:weightSum="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="70px"
+            android:layout_marginLeft="30px"
+            android:text="D3086"
+            android:id="@+id/trainList_trainNum" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_marginLeft="30px"
+            android:paddingBottom="0px"
+            android:layout_marginBottom="0px"
+            android:textSize="30px"
+            android:text="软卧 12"
+            android:id="@+id/trainList_text_highSeat" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:id="@+id/train_station">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="上海虹桥"
+            android:id="@+id/trainList_text_src" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_margin="10px"
+            android:text="武汉"
+            android:id="@+id/trainList_text_des" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="30px"
+            android:text="硬卧 212"
+            android:id="@+id/trainList_text_midSeat" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:id="@+id/train_time">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="16:43"
+            android:id="@+id/trainList_text_start" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_margin="10px"
+            android:text="22:10"
+            android:id="@+id/trainList_text_end" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="30px"
+            android:text="硬座 112"
+            android:id="@+id/trainList_text_lowSeat" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:id="@+id/train_btn">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20px"
+            android:background="@color/material_grey_300"
+            android:text="点击预定"
+            android:id="@+id/btn_booking"/>
+        </LinearLayout>
+</LinearLayout>

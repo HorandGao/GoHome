@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     private TextView loginMail;
     private TextView reverse; // 保留！！！！！
 
+    private String  date=(android.text.format.DateFormat.format("yyyy-MM-dd", Calendar.getInstance())).toString();;
     private int flag=0; //用于标记 区分src_city=0 des_city=1
     private String src_city="";
     private String des_city="";
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         final Calendar c = Calendar.getInstance();
-        go_date.setText(android.text.format.DateFormat.format("MM-dd E", c));
+        go_date.setText(android.text.format.DateFormat.format("yy-MM-dd E", c));
         go_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +69,8 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         c.set(year, monthOfYear, dayOfMonth);
-                        go_date.setText(android.text.format.DateFormat.format("MM-dd E", c));
+                        go_date.setText(android.text.format.DateFormat.format("yy-MM-dd E", c));
+                        date=(android.text.format.DateFormat.format("yyyy-MM-dd", c)).toString();
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 dialog.show();
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity
 
         intent.putExtra("str_src", dym_src.getText().toString().trim());
         intent.putExtra("str_des",dym_des.getText().toString().trim());
-        intent.putExtra("str_date", go_date.getText().toString().trim());
+        intent.putExtra("str_date", date);
         intent.putExtra("str_type", train_type.getText().toString().trim());
         startActivity(intent);
     }
@@ -222,7 +224,7 @@ public class MainActivity extends AppCompatActivity
 
 
         final Calendar c = Calendar.getInstance();
-        go_date.setText(android.text.format.DateFormat.format("MM-dd E", c));
+        go_date.setText(date);
         go_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,7 +232,8 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         c.set(year, monthOfYear, dayOfMonth);
-                        go_date.setText(android.text.format.DateFormat.format("MM-dd E", c));
+                        go_date.setText(android.text.format.DateFormat.format("yy-MM-dd E", c));
+                        date=(android.text.format.DateFormat.format("yyyy-MM-dd", c)).toString();
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 dialog.show();

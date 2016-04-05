@@ -120,18 +120,30 @@
             android:orientation="horizontal"
             android:layout_margin="10px" android:weightSum="0.9">
             <Button
+                android:id="@+id/btn_highSeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:text="软卧:12"
+                android:background="#a9a9a9"
+                android:onClick="selectSeatType"
+                android:tag="high"
                 android:padding="20px" android:layout_marginLeft="20px" android:layout_weight="0.3"/>
             <Button
+                android:id="@+id/btn_midSeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:text="硬卧:212"
+                android:onClick="selectSeatType"
+                android:background="#a9a9a9"
+                android:tag="mid"
                 android:padding="20px" android:layout_weight="0.3"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"/>
             <Button
+                android:id="@+id/btn_lowSeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:text="硬座:112"
+                android:background="#a9a9a9"
+                android:tag="low"
+                android:onClick="selectSeatType"
                 android:padding="20px" android:layout_marginRight="20px" android:layout_weight="0.3"/>
         </LinearLayout>
     </LinearLayout>
@@ -139,6 +151,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/select_passenger"
         android:layout_below="@+id/select_type"
         android:layout_marginTop="30px"
         android:background="#ffffff"
@@ -155,28 +168,57 @@
             android:layout_marginBottom="10px"
             android:layout_marginLeft="30px"
             android:orientation="vertical">
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="horand"
-                android:id="@+id/checkBox1" />
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="horand"
-                android:id="@+id/checkBox2" />
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="horand"
-                android:id="@+id/checkBox3" />
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="horand"
-                android:id="@+id/checkBox4" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="0px"
+                android:gravity="center">
+                <ProgressBar android:id="@+id/trainList_progress" style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp" android:visibility="gone" />
+
+                <ScrollView android:id="@+id/trainList_form" android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </ScrollView>
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lv_trainList"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:divider="#00000000"
+                    android:dividerHeight="10px"
+                    android:layout_marginTop="0dp" />
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/select_passenger"
+        android:layout_marginTop="30px"
+        android:background="#ffffff"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50px"
+            android:layout_margin="20px"
+            android:text="订单总价:"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50px"
+            android:id="@+id/textTotalPrice"
+            android:textColor="#f00505"
+            android:layout_margin="20px"
+            android:text="￥0"
+            />
+        </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

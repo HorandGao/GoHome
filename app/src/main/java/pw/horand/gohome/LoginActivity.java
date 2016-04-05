@@ -378,7 +378,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 //Thread.sleep(2000);
-                String path = "http://115.28.158.46/addUser.action?name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+mRealName;
+                //String path = "http://10.202.73.41:8080/addUser.action?name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+URLEncoder.encode(mRealName,"UTF-8");
+                String path = "http://115.28.158.46/addUser.action?name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+URLEncoder.encode(mRealName,"UTF-8");
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setConnectTimeout(5000);
@@ -444,6 +445,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 //Thread.sleep(2000);
+                //String path = "http://10.202.73.41:8080/horand/test.action?name="+mEmail+"&password="+mPassword;
                 String path = "http://115.28.158.46/horand/test.action?name="+mEmail+"&password="+mPassword;
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();

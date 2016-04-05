@@ -5,6 +5,13 @@
     android:padding="30px"
     android:background="@color/material_grey_300"
     >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -19,6 +26,8 @@
 
         <EditText
             android:id="@+id/name"
+            android:text="aaa@aaa"
+            android:inputType="textEmailAddress"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -36,6 +45,7 @@
 
         <EditText
             android:id="@+id/realName"
+            android:text="奥迪"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -52,6 +62,8 @@
             android:textColor="#000000"/>
         <EditText
             android:id="@+id/tel"
+            android:inputType="phone"
+            android:text="18817828200"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -69,6 +81,8 @@
             />
         <EditText
             android:id="@+id/sign_idcard"
+            android:inputType="number"
+            android:text="411213243143241"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -85,6 +99,8 @@
             android:textColor="#000000"/>
         <EditText
             android:id="@+id/PWD"
+            android:inputType="textPassword"
+            android:text="aaaaaa"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -101,6 +117,8 @@
             android:textColor="#000000"/>
         <EditText
             android:id="@+id/repeatPWD"
+            android:text="aaaaaa"
+            android:inputType="textPassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -122,5 +140,7 @@
         android:text="返 回 登 录"
         android:textSize="20dp"
         android:onClick="cancelSignUpClick"/>
+    </LinearLayout>
 
+    </ScrollView>
 </LinearLayout>
