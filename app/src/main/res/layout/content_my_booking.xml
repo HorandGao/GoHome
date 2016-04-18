@@ -219,6 +219,20 @@
             android:text="￥0"
             />
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="0px"
+        android:gravity="center">
+    <ProgressBar android:id="@+id/addOrder_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
+    <ScrollView android:id="@+id/addOrder_form" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ScrollView>
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

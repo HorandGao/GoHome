@@ -34,7 +34,7 @@
         android:layout_alignParentStart="true"
         android:layout_margin="70px"
         android:id="@+id/ll_detail"
-        android:weightSum="1.1"
+        android:weightSum="1.7"
         >
         <TextView
             android:id="@+id/bookingDate"
@@ -65,13 +65,21 @@
             android:layout_width="wrap_content" android:layout_weight="0.1"
             android:layout_height="wrap_content" android:textSize="50px" android:text="到达时间：2016-3-24 18:16:04"/>
         <TextView
-            android:id="@+id/orderUser"
+            android:id="@+id/seatType"
             android:layout_width="wrap_content" android:layout_weight="0.1"
-            android:layout_height="wrap_content" android:textSize="50px" android:text="乘  坐  人：高淳"/>
+            android:layout_height="wrap_content" android:textSize="50px" android:text="座位类型：商务座"/>
         <TextView
-            android:id="@+id/idCard"
+            android:id="@+id/orderUser1"
             android:layout_width="wrap_content" android:layout_weight="0.1"
-            android:layout_height="wrap_content" android:textSize="50px" android:text="证  件  号：422201199333331011"/>
+            android:layout_height="wrap_content" android:textSize="50px" android:text="乘  客  一：高淳(422201199333331011)"/>
+        <TextView
+            android:id="@+id/orderUser2"
+            android:layout_width="wrap_content" android:layout_weight="0.1"
+            android:layout_height="wrap_content" android:textSize="50px" android:text="乘  客  二：高淳(422201199333331011)"/>
+        <TextView
+            android:id="@+id/orderUser3"
+            android:layout_width="wrap_content" android:layout_weight="0.1"
+            android:layout_height="wrap_content" android:textSize="50px" android:text="乘  客  三：高淳(422201199333331011)"/>
         <TextView
             android:id="@+id/phoneNum"
             android:layout_width="wrap_content" android:layout_weight="0.1"
@@ -80,28 +88,24 @@
             android:id="@+id/orderType"
             android:layout_width="wrap_content" android:layout_weight="0.1"
             android:layout_height="wrap_content" android:textSize="50px" android:text="订单状态：已完成"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_alignBottom="@+id/ll_detail"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_marginLeft="70px"
-        android:layout_marginRight="70px">
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_goPay"
-            android:text="去支付"
-            android:onClick="goPayClick"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_cancelOrder"
-            android:text="取消订单"
-            android:onClick="cancelOrderClick"/>
+            android:gravity="center_horizontal"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_goPay"
+                android:text="去支付"
+                android:onClick="goPayClick"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_cancelOrder"
+                android:text="取消订单"
+                android:onClick="cancelOrderClick"/>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

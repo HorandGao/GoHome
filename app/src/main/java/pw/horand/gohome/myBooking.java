@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -54,9 +55,13 @@ public class myBooking extends AppCompatActivity
     private ListView lv_order;
     private List<Map<String,Object>> list_order;
     private orderAsyncTask orderTask = null;
+    private AddorderAsyncTask addOrderTask = null;
 
     private View mProgressView;
     private View mtrainListFormView;
+
+    private View mAddOrderProcessView;
+    private View mAddOrderFormView;
 
     private String seatPrice="0";
     private String seatType="1";
@@ -73,6 +78,8 @@ public class myBooking extends AppCompatActivity
 
         mtrainListFormView = findViewById(R.id.trainList_form);
         mProgressView = findViewById(R.id.trainList_progress);
+        mAddOrderProcessView = findViewById(R.id.addOrder_progress);
+        mAddOrderFormView = findViewById(R.id.addOrder_form);
 
         globalData userInfo = (globalData)getApplication();
         ((TextView) findViewById(R.id.login_mail)).setText(userInfo.getEmail().toString());
@@ -107,14 +114,6 @@ public class myBooking extends AppCompatActivity
         ((TextView)findViewById(R.id.btn_highSeat)).setText(intent.getStringExtra("seatType1")+" ￥"+intent.getStringExtra("seatPrice1"));
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -224,6 +223,38 @@ public class myBooking extends AppCompatActivity
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgressAddOrder(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mAddOrderFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mAddOrderFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mAddOrderFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mAddOrderProcessView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mAddOrderProcessView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mAddOrderProcessView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mAddOrderProcessView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mAddOrderFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
 
     public String httpGetOrder(String path){
         try {
@@ -294,10 +325,6 @@ public class myBooking extends AppCompatActivity
         }
         @Override
         protected void onPostExecute(Boolean result){
-//            SimpleAdapter orderAdapter;
-//            orderAdapter = new SimpleAdapter(waitPayMoney.this,list_order,R.layout.order_item,
-//                    new String[]{"srcStation","desStation","srcDate","trainNum","orderType"},
-//                    new int[]{R.id.srcStation,R.id.desStation,R.id.srcDate,R.id.trainNum,R.id.orderType});
             showProgress(false);
             if(list_order.size()==0){
                 return;
@@ -366,49 +393,99 @@ public class myBooking extends AppCompatActivity
         }
     }
 
-    public void submitOrderClick(View view){
+    public void submitOrderClick(View view) throws UnsupportedEncodingException {
         if(seatPrice.equals("0")){
             Toast.makeText(getApplicationContext(), "请选择座位类型" , Toast.LENGTH_LONG).show();
             return;
         }else if(personNum==0){
             Toast.makeText(getApplicationContext(), "请至少选择1名乘客" , Toast.LENGTH_LONG).show();
             return;
-        }else if(personNum>3){
-            Toast.makeText(getApplicationContext(), "一次至多选择3名乘客" , Toast.LENGTH_LONG).show();
+        }else if(personNum>1){
+            Toast.makeText(getApplicationContext(), "一次至多选择1名乘客" , Toast.LENGTH_LONG).show();
             return;
         }
 
-        Intent intent = new Intent(myBooking.this,resultSubmitOrder.class);
-
         String str_idCard = "";
-        for(int i=0 ; i< lv_order.getChildCount();i++){
+        String[] name = new String[3];
+        name[0]=name[1]=name[2]="";
+        for(int i=0,j=0 ; i< lv_order.getChildCount();i++){
             LinearLayout ll = (LinearLayout)lv_order.getChildAt(i);
+            String temp = "";
+            name[i] = "";
             if(((CheckBox)ll.findViewById(R.id.personName)).isChecked()){
                 str_idCard =str_idCard + "a" + ((TextView) ll.findViewById(R.id.personIDcard)).getText().toString();
+                temp = ((CheckBox) ll.findViewById(R.id.personName)).getText().toString();
+            }
+            if(!temp.equals("")){
+                name[j] = temp;
+                j++;
             }
         }
+        globalData userInfo = (globalData)getApplication();
+        String urlPath = userInfo.apiURL + "/addOrder.action?email="+userInfo.getEmail()+
+                "&trainNum="+trainNum+"&date="+date+"&idcards="+str_idCard+"&seatPrice="+seatPrice+
+                "&seatType="+seatType+"&name1="+
+                URLEncoder.encode(name[0], "UTF-8")+"&name2="+URLEncoder.encode(name[1], "UTF-8")+"&name3="+URLEncoder.encode(name[2], "UTF-8");
+        showProgressAddOrder(true);
+        addOrderTask = new AddorderAsyncTask(urlPath);
+        addOrderTask.execute((Void) null);
 
-        Log.i("aaaa","userId");
-        Log.i("aaaa","trainNum");
-        Log.i("aaaa","date");
-        Log.i("aaaa","idcards");
-        Log.i("aaaa","seatPrice");
-        Log.i("aaaa","seatType");
-        Log.i("aaaa","name1 name2 name3");
+
         //提交订单参数
-//        trainNum;
-//        date;
-//        seatType;
-//        seatPrice;
-//        personNum;
-//        personIDcard;
+    }
 
+    private class AddorderAsyncTask extends AsyncTask<Void ,Integer,Boolean> {
 
+        private String pathUrl;
+        private String mMessage = "请求超时";
+        AddorderAsyncTask(String path){
+            pathUrl = path;
+        }
+        @Override
+        protected void onPreExecute(){
 
-        //reverse to transform data!!!
-       // startActivity(intent);
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            final String[] str_order = new String[1];
+            str_order[0] =  httpGetOrder(pathUrl);
+            try{
+                JSONObject a = new JSONObject(str_order[0]);
+                mMessage = a.getString("msg");
+                if(a.getString("success").equals("1")) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            return false;
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values){
+
+        }
+        @Override
+        protected void onPostExecute(Boolean result){
+            showProgressAddOrder(false);
+            if(result){
+                Toast.makeText(myBooking.this, "订单提交成功："+mMessage, Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(myBooking.this, "订单提交失败："+mMessage, Toast.LENGTH_SHORT).show();
+            }
+        }
+        protected void onCancelled() {
+            addOrderTask = null;
+            showProgressAddOrder(false);
+        }
 
     }
+
+
+
+
 
     CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
 
@@ -426,11 +503,10 @@ public class myBooking extends AppCompatActivity
              int total = personNum * Integer.parseInt(seatPrice);
             ((TextView)findViewById(R.id.textTotalPrice)).setText("￥" + total);
 
-            Toast.makeText(getApplicationContext(),
-                    "获取的值:" + isChecked + "xxxxx" + box.getText(),
-                    Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),
+//                    "获取的值:" + isChecked + "xxxxx" + box.getText(),
+//                    Toast.LENGTH_LONG).show();
 
         }
     };
-
 }

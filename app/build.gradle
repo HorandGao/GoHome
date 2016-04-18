@@ -24,4 +24,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
+    compile files('D:/StudioProjects/GoHome1.2/libs/BmobPay_v2.5_160324.jar')
 }

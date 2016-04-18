@@ -46,6 +46,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import c.b.BP;
+import c.b.PListener;
+
 import static pw.horand.gohome.LoginActivity.InputStreamTOString;
 
 public class myOrderDetail extends AppCompatActivity
@@ -54,6 +57,7 @@ public class myOrderDetail extends AppCompatActivity
 
     private List<Map<String,Object>> list_order;
     private orderAsyncTask orderTask = null;
+ private paySuccessAsyncTask paySucccessTask = null;
 
     private View mProgressView;
     private View mOrderDetailFormView;
@@ -81,9 +85,18 @@ public class myOrderDetail extends AppCompatActivity
         ((TextView)(findViewById(R.id.desDate))).setText("到达时间："+intent.getStringExtra("desDate"));
         ((TextView)(findViewById(R.id.srcStation))).setText("出  发  站："+intent.getStringExtra("srcStation"));
         ((TextView)(findViewById(R.id.desStation))).setText("终  到  站："+intent.getStringExtra("desStation"));
-        ((TextView)(findViewById(R.id.orderUser))).setText("乘  坐  人："+intent.getStringExtra("name"));
-        ((TextView)(findViewById(R.id.idCard))).setText("证  件  号："+intent.getStringExtra("idCard"));
+        ((TextView)(findViewById(R.id.seatType))).setText("座位类型："+intent.getStringExtra("seatType"));
+        ((TextView)(findViewById(R.id.orderUser1))).setText("乘  客  一："+intent.getStringExtra("personName1")+" ( "+intent.getStringExtra("personIDcard1")+" )");
+        ((TextView)(findViewById(R.id.orderUser2))).setText("乘  客  二："+intent.getStringExtra("personName2")+" ( "+intent.getStringExtra("personIDcard2")+" )");
+        ((TextView)(findViewById(R.id.orderUser3))).setText("乘  客  三："+intent.getStringExtra("personName3")+" ( "+intent.getStringExtra("personIDcard3")+" )");
         ((TextView)(findViewById(R.id.phoneNum))).setText("手  机  号：" + intent.getStringExtra("phoneNum"));
+
+        if(intent.getStringExtra("personName2").equals("")){
+            ((TextView)(findViewById(R.id.orderUser2))).setVisibility(View.GONE);
+        }
+        if(intent.getStringExtra("personName3").equals("")){
+            ((TextView)(findViewById(R.id.orderUser3))).setVisibility(View.GONE);
+        }
         String str_orderType = intent.getStringExtra("orderType");
         if(str_orderType.equals("0")){
             //str_orderType = "排队中(第" +intent.getStringExtra("leftPersion").toString()+"位)";
@@ -92,8 +105,11 @@ public class myOrderDetail extends AppCompatActivity
             ((Button)findViewById(R.id.btn_goPay)).setVisibility(View.GONE);
         }else if(str_orderType.equals("1")){
             str_orderType = "待付款";
-            ((Button)findViewById(R.id.btn_cancelOrder)).setVisibility(View.GONE);
-        }else {
+            //((Button)findViewById(R.id.btn_cancelOrder)).setVisibility(View.GONE);
+        }else if(str_orderType.equals("2")){
+            str_orderType = "已付款";
+            ((Button)findViewById(R.id.btn_goPay)).setVisibility(View.GONE);
+        }else if(str_orderType.equals("3")){
             str_orderType = "已完成";
             ((Button)findViewById(R.id.btn_goPay)).setVisibility(View.GONE);
             ((Button)findViewById(R.id.btn_cancelOrder)).setVisibility(View.GONE);
@@ -101,17 +117,9 @@ public class myOrderDetail extends AppCompatActivity
         ((TextView)(findViewById(R.id.orderType))).setText("订单状态：" + str_orderType);
 
         orderTask = new orderAsyncTask(userInfo.apiURL+"/cancelOrder.action?orderNum="+intent.getStringExtra("orderNum"));
+        paySucccessTask = new paySuccessAsyncTask(userInfo.apiURL+"/paySuccess.action?orderNum="+intent.getStringExtra("orderNum"));
 
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -324,7 +332,92 @@ public class myOrderDetail extends AppCompatActivity
                 .setNegativeButton("否", null)
                 .show();
     }
-    public void goPayClick(View view){
 
+
+    private class paySuccessAsyncTask extends AsyncTask<Void ,Integer,Boolean>{
+
+        private String pathUrl;
+        paySuccessAsyncTask(String path){
+            pathUrl = path;
+        }
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            final String[] str_order = new String[1];
+            str_order[0] =  httpGetOrder(pathUrl);
+            try{
+                JSONObject a = new JSONObject(str_order[0]);
+                if(a.getString("success").equals("1")) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            return true;
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values){
+
+        }
+        @Override
+        protected void onPostExecute(Boolean result){
+            paySucccessTask = null;
+            showProgress(false);
+
+            if(result){
+                Toast.makeText(myOrderDetail.this, "提交成功,即将跳转到我的订单界面", Toast.LENGTH_SHORT).show();
+                Intent intent  = new Intent(myOrderDetail.this,myOrder.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(myOrderDetail.this, "提交失败", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        protected void onCancelled() {
+            paySucccessTask = null;
+            showProgress(false);
+        }
+    }
+
+    public void goPayClick(View view){
+        BP.pay(myOrderDetail.this, "高帅出行", "test", 0.01, true, new PListener() {
+            @Override
+            public void orderId(String s) {
+               // Log.i("aaaa","orderid"+s);
+            }
+
+            @Override
+            public void succeed() {
+                new  AlertDialog.Builder(myOrderDetail.this)
+                        .setTitle("支付结果")
+                        .setMessage("支付成功")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                showProgress(true);
+                                paySucccessTask.execute((Void) null);
+                            }
+                        })
+                        .show();
+            }
+
+            @Override
+            public void fail(int i, String s) {
+                Toast.makeText(getApplicationContext(),
+                        "支付失败!"+s, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void unknow() {
+                Toast.makeText(getApplicationContext(),
+                        "支付失败,请检查网络", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

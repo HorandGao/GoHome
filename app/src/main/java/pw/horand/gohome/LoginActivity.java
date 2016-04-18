@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -35,6 +34,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +52,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import c.b.BP;
+import commonClass.signCode;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -84,16 +87,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+    protected static final int CHANGE_UI=1;
+    protected static final int ERROR =2;
+    MyHandler handler;
+    private EditText sign_tel;
 
-//    private Handler handler = new Handler(){
-//        public void handlerMessage(android.os.Message msg){
-//            if(msg.what == 1){
-//                mEmailView.setText("test");
-//            }else{
-//                mEmailView.setText("test222");
-//            }
-//        };
-//    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +115,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+
+        handler = new MyHandler();
+
+
+        BP.init(LoginActivity.this, "7cdf7edff1cfe65e9937f0f1e2a8e4f0");
+
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -235,20 +239,64 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask("http://115.28.158.46",email, password);
             mAuthTask.execute((Void) null);
         }
     }
 
     private void attemptSignUp(){
-        showProgress(true);
+        String pattern_phone = "^(13[0-9]|15[01]|153|15[6-9]|180|18[23]|18[5-9])\\d{8}$";
+        String pattern_mail = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
         String name = ((EditText)findViewById(R.id.name)).getText().toString();
-        String pwd = ((EditText)findViewById(R.id.repeatPWD)).getText().toString();
+        String pwd = ((EditText)findViewById(R.id.PWD)).getText().toString();
+        String code = ((EditText)findViewById(R.id.signCode)).getText().toString();
+        String repeatPwd=((EditText)findViewById(R.id.repeatPWD)).getText().toString();
         String idcard = ((EditText)findViewById(R.id.sign_idcard)).getText().toString();
         String phone = ((EditText)findViewById(R.id.tel)).getText().toString();
         String realName = ((EditText)findViewById(R.id.realName)).getText().toString();
 
-        mSignUpTask = new SignUpTask(name,pwd,idcard,phone,realName);
+        if(name.equals("")){
+            Toast.makeText(LoginActivity.this, "邮箱不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(realName.equals("")){
+            Toast.makeText(LoginActivity.this, "姓名不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(phone.equals("")){
+            Toast.makeText(LoginActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(code.equals("")){
+            Toast.makeText(LoginActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(idcard.equals("")){
+            Toast.makeText(LoginActivity.this, "证件号不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(pwd.equals("")){
+            Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!name.matches(pattern_mail)){
+            Toast.makeText(LoginActivity.this, "邮箱格式不对", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!phone.matches(pattern_phone)){
+            Toast.makeText(LoginActivity.this, "手机号格式不对", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!pwd.equals(repeatPwd)){
+            Toast.makeText(LoginActivity.this, "两次输入的密码不一致", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        showProgress(true);
+        mSignUpTask = new SignUpTask(name,pwd,idcard,phone,realName,code);
         mSignUpTask.execute((Void) null);
     }
 
@@ -362,13 +410,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mIdcard;
         private final String mPhone;
         private final String mRealName;
+        private final String mCode;
+        private String mMessage="请求超时";
 
-        SignUpTask(String name, String password ,String idcard,String phone ,String realName) {
+        SignUpTask(String name, String password ,String idcard,String phone ,String realName,String code) {
             mEmail = name;
             mPassword = password;
             mIdcard = idcard;
             mPhone = phone;
             mRealName = realName;
+            mCode = code;
         }
 
         @Override
@@ -378,8 +429,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 //Thread.sleep(2000);
-                //String path = "http://10.202.73.41:8080/addUser.action?name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+URLEncoder.encode(mRealName,"UTF-8");
-                String path = "http://115.28.158.46/addUser.action?name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+URLEncoder.encode(mRealName,"UTF-8");
+                //String path = "http://10.202.24.55:8080/addUser.action?code="+mCode+"&name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+URLEncoder.encode(mRealName,"UTF-8");
+                String path = "http://115.28.158.46/addUser.action?code="+mCode+"&name="+mEmail+"&pwd="+mPassword+"&idcard="+mIdcard+"&phone="+mPhone+"&realName="+URLEncoder.encode(mRealName,"UTF-8");
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setConnectTimeout(5000);
@@ -389,6 +440,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     InputStream is = conn.getInputStream();
                     String test = InputStreamTOString(is, "UTF-8");
                     JSONObject a = new JSONObject(test);
+                    mMessage = a.getString("msg");
                     if(a.getString("success").equals("1")) {
                         temp = true;
                     }else{
@@ -412,7 +464,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Toast.makeText(LoginActivity.this, "注册成功，跳转到登录界面 ", Toast.LENGTH_SHORT).show();
                 cancelSignUpClick(new View(LoginActivity.this));
             } else {
-                Toast.makeText(LoginActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "注册失败："+mMessage, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -432,10 +484,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private String mPhone;
+        private String mRealName;
+        private String mIdcard;
+        private final String mPath;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String path ,String email, String password) {
             mEmail = email;
             mPassword = password;
+            mPath = path;
         }
 
         @Override
@@ -445,8 +502,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 //Thread.sleep(2000);
-                //String path = "http://10.202.73.41:8080/horand/test.action?name="+mEmail+"&password="+mPassword;
-                String path = "http://115.28.158.46/horand/test.action?name="+mEmail+"&password="+mPassword;
+                String path = mPath+"/test?name="+mEmail+"&password="+mPassword;
+
+                //String path = "http://115.28.158.46/test?name="+mEmail+"&password="+mPassword;
                 URL url = new URL(path);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setConnectTimeout(5000);
@@ -455,8 +513,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if(conn.getResponseCode() == 200){
                     InputStream is = conn.getInputStream();
                     String test = InputStreamTOString(is, "UTF-8");
-                    JSONObject a = new JSONObject(test);
-                    if(a.getString("success").equals("1")) {
+                    JSONArray jA = new JSONArray(test);
+                    JSONObject a = jA.getJSONObject(0);
+                    if(a.getString("rowcount").equals("1")) {
+                        mPhone = a.getString("phoneNum");
+                        mIdcard = a.getString("idCard");
+                        mRealName = a.getString("realName");
                         temp = true;
                     }else{
                         temp= false;
@@ -466,6 +528,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 conn.disconnect();
             }catch (Exception e){
+
                 return false;
             }
             return temp;
@@ -480,7 +543,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 globalData userInfo = (globalData)getApplication();
                 userInfo.setEmail(mEmail);
-
+                userInfo.setIdcard(mIdcard);
+                userInfo.setPhone(mPhone);
+                userInfo.setRealName(mRealName);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("reverse", "");
                 startActivity(intent);
@@ -546,9 +611,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 try {
                     attemptLogin();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
+                } catch (Exception e) {
+
                     e.printStackTrace();
                 }
             }
@@ -565,4 +629,45 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
+
+
+    public void getVerifyCodeClick(View v){
+        String pattern = "^(13[0-9]|15[01]|153|15[6-9]|180|18[23]|18[5-9])\\d{8}$";
+        sign_tel = (EditText)findViewById(R.id.tel);
+        final String phone = sign_tel.getText().toString().trim();
+        if(!phone.matches(pattern)){
+            Toast.makeText(LoginActivity.this, "手机号格式不对", Toast.LENGTH_SHORT).show();
+            return ;
+        }
+        final String type = "注册";
+            //子线程中网络请求
+        new Thread() {
+            public void run(){
+                  if(signCode.getCode(phone,type)){
+                      Message msg = new Message();
+                      msg.what = CHANGE_UI;
+                      handler.sendMessage(msg);
+                  }else {
+                      Message msg = new Message();
+                      msg.what = ERROR;
+                      handler.sendMessage(msg);
+                  }
+            };
+        }.start();
+    }
+
+    class MyHandler extends Handler
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            if(msg.what == 1){
+                Toast.makeText(LoginActivity.this, "验证码获取成功", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(LoginActivity.this, "验证码获取失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

@@ -88,6 +88,14 @@ public class myQueue extends AppCompatActivity
                 intent.putExtra("phoneNum", list_order.get(position).get("phoneNum").toString());
                 intent.putExtra("orderType", list_order.get(position).get("orderType").toString());
 
+                intent.putExtra("seatType", list_order.get(position).get("orderSeatType").toString());
+                intent.putExtra("personName1", list_order.get(position).get("personName1").toString());
+                intent.putExtra("personName2", list_order.get(position).get("personName2").toString());
+                intent.putExtra("personName3", list_order.get(position).get("personName3").toString());
+                intent.putExtra("personIDcard1", list_order.get(position).get("personIDcard1").toString());
+                intent.putExtra("personIDcard2", list_order.get(position).get("personIDcard2").toString());
+                intent.putExtra("personIDcard3", list_order.get(position).get("personIDcard3").toString());
+
                 int str_queueNum = Integer.parseInt(list_order.get(position).get("maxQueueNum").toString())-Integer.parseInt(list_order.get(position).get("queneNum").toString())+1;
                 intent.putExtra("leftPersion", str_queueNum);
                 startActivity(intent);
@@ -97,14 +105,6 @@ public class myQueue extends AppCompatActivity
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

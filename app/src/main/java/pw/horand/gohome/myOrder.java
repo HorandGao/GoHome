@@ -93,6 +93,14 @@ public class myOrder extends AppCompatActivity
                 intent.putExtra("idCard", list_order.get(position).get("idCard").toString());
                 intent.putExtra("phoneNum", list_order.get(position).get("phoneNum").toString());
                 intent.putExtra("orderType", list_order.get(position).get("orderType").toString());
+
+                intent.putExtra("seatType", list_order.get(position).get("orderSeatType").toString());
+                intent.putExtra("personName1", list_order.get(position).get("personName1").toString());
+                intent.putExtra("personName2", list_order.get(position).get("personName2").toString());
+                intent.putExtra("personName3", list_order.get(position).get("personName3").toString());
+                intent.putExtra("personIDcard1", list_order.get(position).get("personIDcard1").toString());
+                intent.putExtra("personIDcard2", list_order.get(position).get("personIDcard2").toString());
+                intent.putExtra("personIDcard3", list_order.get(position).get("personIDcard3").toString());
                 startActivity(intent);
 
             }
@@ -101,14 +109,6 @@ public class myOrder extends AppCompatActivity
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -346,7 +346,9 @@ public class myOrder extends AppCompatActivity
                 ((TextView) view.findViewById(R.id.orderType)).setText("排队中");
             }else if(str_orderType.equals("1")){
                 ((TextView) view.findViewById(R.id.orderType)).setText("待付款");
-            }else{
+            }else if(str_orderType.equals("2")){
+                ((TextView) view.findViewById(R.id.orderType)).setText("已付款");
+            }else if(str_orderType.equals("3")){
                 ((TextView) view.findViewById(R.id.orderType)).setText("已完成");
             }
 
